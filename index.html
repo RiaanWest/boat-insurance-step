@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boat Insurance Step</title>
+<style>
+  /* Design tokens: names are @boatsetter/design-tokens keys, values are the Boatsetter render.
+     Regenerate with jq from node_modules/@boatsetter/design-tokens/boatsetter/tamagui.json */
+  :root {
+    --color-fillDefault: #ffffff;
+    --color-fillNeutralLight: #f8f9fa;
+    --color-fillPrimaryLight: #e9f1fc;
+    --color-textDefault: #17263c;
+    --color-textSecondary: #434c5c;
+    --color-textDisabled: #7a838c;
+    --color-textError: #bc3509;
+    --color-textPrimary: #0751c2;
+    --color-textInverse: #ffffff;
+    --color-borderDefault: #c3c7cc;
+    --color-borderActionEnabled: #0751c2;
+    --actionRow-colorTextPrimary: #17263c;
+    --actionRow-colorTextSecondary: #434c5c;
+    --actionRow-sizeIconSize: 24px;
+    --size-radius-2xl: 24px;
+    --radioButton-colorActive: #0751c2;
+    --radioButton-colorBorderDefault: #c3c7cc;
+    --radioButton-colorBorderDisabled: #eef1f5;
+    --radioButton-colorDisabled: #eef1f5;
+    --radioButton-sizeWidth: 24px;
+    --radioButton-sizeSelectorSize: 8px;
+    --checkbox-colorEnabled: #ffffff;
+    --checkbox-colorActive: #0751c2;
+    --checkbox-colorBorderDefault: #c3c7cc;
+    --checkbox-colorBorderError: #bc3509;
+    --checkbox-colorBorderFocus: #17263c;
+    --checkbox-colorIconColor: #ffffff;
+    --checkbox-colorLabel: #17263c;
+    --checkbox-colorErrorMessage: #bc3509;
+    --checkbox-sizeWidth: 24px;
+    --checkbox-sizeRadius: 4px;
+    --checkbox-sizeGapHorizontal: 16px;
+    --checkbox-sizeGapVertical: 8px;
+    --banner-colorBackgroundError: #ffefea;
+    --banner-colorBackgroundWarning: #fff1d9;
+    --banner-colorBackgroundInfo: #e9f1fc;
+    --banner-colorIconError: #bc3509;
+    --banner-colorIconWarning: #ffbc51;
+    --banner-colorIconInfo: #0751c2;
+    --banner-colorText: #17263c;
+    --banner-colorTextLine2: #434c5c;
+    --banner-sizeRadius: 8px;
+    --banner-sizePaddingLg: 16px;
+    --banner-sizeHGapSm: 8px;
+    --skeleton-colorStep1Dark: #eef1f5;
+    --skeleton-colorStep2Light: #f8f9fa;
+    --button-colorPrimaryEnabled: #0751c2;
+    --button-colorPrimaryHovered: #0a4195;
+    --button-colorPrimaryDisabled: #eef1f5;
+    --button-colorPrimaryIconDisabled: #7a838c;
+    --button-colorSecondaryBorder: #eef1f5;
+    --button-colorSecondaryEnabled: #ffffff;
+    --snackbar-colorBackgroundDefault: #17263c;
+    --snackbar-colorText: #ffffff;
+    --snackbar-sizeRadius: 8px;
+    --space-scaleS3: 12px;
+    --space-scaleS4: 16px;
+    --space-scaleXl: 24px;
+    --space-scaleS7: 28px;
+    --radius-pill: 9999px;
+    --font: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* Body copy is Figtree Body-md (400 16/24), as Text renders it. */
+  body { font-family: var(--font); font-size: 16px; line-height: 24px; color: var(--color-textDefault); background: #e9ecf1; }
+  .layout { display: flex; gap: 32px; justify-content: center; align-items: flex-start; padding: 24px 16px; }
+
+  /* Prototype controls: not part of the design */
+  .panel { width: 360px; background: #f6f7f9; border: 1px solid #e2e6eb; border-radius: 16px; font-family: 'Figtree', var(--font); font-size: 13px; line-height: 19px; color: #2b3647; position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto; }
+  .panel .phead { padding: 20px 20px 16px; background: #fff; border-bottom: 1px solid #e2e6eb; border-radius: 16px 16px 0 0; }
+  .panel .phead .eyebrow { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: #7a838c; }
+  .panel .phead h2 { font-size: 18px; line-height: 24px; font-weight: 700; color: #17263c; margin: 4px 0 6px; }
+  .panel .phead p { color: #59626e; }
+  .panel .pgroup { padding: 16px 20px; border-bottom: 1px solid #e2e6eb; }
+  .panel .pgroup:last-child { border-bottom: none; }
+  .panel .plabel { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: #7a838c; margin: 0 0 8px; }
+  .panel .plabel ~ .plabel { margin-top: 16px; }
+  .panel .viewport-row { margin-bottom: 16px; }
+  #tasks { display: flex; flex-direction: column; gap: 6px; }
+  .panel button.task { display: flex; gap: 10px; align-items: flex-start; width: 100%; text-align: left; padding: 10px 12px; border: 1px solid #e2e6eb; border-radius: 10px; background: #fff; font: inherit; font-size: 13px; color: #17263c; cursor: pointer; transition: border-color .12s, box-shadow .12s; }
+  .panel button.task:hover { border-color: #c3c7cc; }
+  .panel button.task .n { flex: 0 0 22px; height: 22px; border-radius: 50%; background: #eef1f5; color: #434c5c; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .panel button.task[aria-pressed="true"] { border-color: #0751c2; box-shadow: 0 0 0 1px #0751c2; }
+  .panel button.task[aria-pressed="true"] .n { background: #0751c2; color: #fff; }
+  .panel .brief { margin-top: 12px; background: #fff; border: 1px solid #e2e6eb; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .panel .brief .k { display: block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: #7a838c; margin-bottom: 2px; }
+  .panel .brief .expect .k { color: #2f7d4f; }
+  .panel .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .panel .seg button { padding: 5px 10px; border: 1px solid #d6dae0; border-radius: 999px; background: #fff; font: inherit; font-size: 12px; color: #2b3647; cursor: pointer; }
+  .panel .seg button:hover { border-color: #a9b0b8; }
+  .panel .seg button[aria-pressed="true"] { background: #17263c; color: #fff; border-color: #17263c; }
+  .panel .spoken { background: #fff; border: 1px solid #e2e6eb; border-radius: 10px; padding: 10px 12px; min-height: 40px; color: #2b3647; }
+  .panel .log { background: #17263c; color: #cfe3ff; border-radius: 10px; padding: 10px 12px; min-height: 40px; max-height: 180px; overflow-y: auto; }
+  .panel .log div { font-family: ui-monospace, Menlo, monospace; font-size: 11px; line-height: 16px; padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,.08); word-break: break-word; }
+  .panel .log div:last-child { border-bottom: none; }
+  .panel button.task:focus-visible, .panel .seg button:focus-visible { outline: 2px solid #434c5c; outline-offset: 2px; }
+  details.panel-wrap > summary { display: none; }
+  .operator .pgroup:not(.op-wording) { display: none; }
+  .operator .phead p + p { margin-top: 8px; }
+
+  /* Device frames */
+  .device { background: var(--color-fillDefault); position: relative; display: flex; flex-direction: column; overflow: hidden; }
+  .device.phone { width: 390px; height: min(844px, calc(100vh - 48px)); border-radius: 44px; box-shadow: 0 20px 60px rgba(0,0,0,.15); }
+  .device.desktop { width: 900px; height: min(760px, calc(100vh - 48px)); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.12); }
+  .topend { display: flex; align-items: center; gap: 12px; }
+  /* Button, as web/packages/ui-shared/src/primitives/Button renders it: button.* tokens, Label-Bold-md (Figtree 700 16/24), radius 8 (isPill false). */
+  .btn-primary, .btn-secondary, .btn-neutral { height: 48px; padding: 12px 24px; border-radius: 8px; font-family: 'Figtree', var(--font); font-size: 16px; line-height: 24px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  .btn-primary { border: none; background: #0751c2; color: #ffffff; min-width: 120px; }
+  .btn-primary:hover { background: #0a4195; }
+  .btn-primary:active { background: #17263c; }
+  .btn-primary[aria-disabled="true"] { background: #eef1f5; color: #7a838c; cursor: default; }
+  .btn-secondary { border: 1px solid #0751c2; background: #ffffff; color: #0751c2; }
+  .btn-secondary:hover { background: #f8f9fa; border-color: #0a4195; color: #0a4195; }
+  .btn-secondary:active { background: #f8f9fa; border-color: #17263c; color: #17263c; }
+  .btn-neutral { border: 1px solid #c3c7cc; background: #ffffff; color: #17263c; }
+  .btn-neutral:hover { background: #f8f9fa; }
+  .btn-neutral:active { background: #f8f9fa; border-color: #17263c; }
+  .btn-tertiary { height: 32px; padding: 4px 2px; border: none; border-radius: 8px; background: none; font-family: 'Figtree', var(--font); font-size: 16px; line-height: 24px; font-weight: 600; color: #17263c; cursor: pointer; }
+  .btn-tertiary:hover { background: #f8f9fa; }
+  .btn-tertiary.sm { height: 24px; padding: 0 2px; font-size: 14px; line-height: 20px; text-decoration: underline; }
+  /* Known answers: no real equivalent; styled as web/packages/ui-shared/src/components/Card (cardCraft.elevationBg #fff, radiusLg 16, scaleS4 padding, getElevation shadow). Title Label-Semi-sm, list Body-sm, Divider default #eef1f5. */
+  .uw .known { background: #ffffff; border-radius: 16px; padding: 16px; box-shadow: 0 0 12px 0 rgba(0,0,0,.07); display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 20px; }
+  .uw .known strong { font-weight: 600; color: #17263c; }
+  .uw .known .list { color: #434c5c; }
+  .uw .known .btn-tertiary { align-self: flex-start; }
+  .uw .known-fields { display: flex; flex-direction: column; gap: 24px; margin: 12px 0 8px; padding-top: 16px; border-top: 1px solid #eef1f5; }
+  .btn-primary:focus-visible, .btn-secondary:focus-visible, .btn-neutral:focus-visible, .btn-tertiary:focus-visible { outline: 2px solid #434c5c; outline-offset: 2px; }
+  /* Wizard header, as web/packages/ui-cb/src/components/OnboardingPageShell renders MobileHeaderRow: min-height 64, scaleS4 padding and gap, Title-sm (700 16/22) title, Divider default (#eef1f5) below. */
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 16px; font-size: 14px; line-height: 20px; font-weight: 600; color: #17263c; border-bottom: 1px solid #eef1f5; background: #ffffff; }
+  #topLeft { font-size: 16px; line-height: 22px; font-weight: 700; color: #17263c; }
+  .scroll { flex: 1; overflow-y: auto; }
+  .form { padding: var(--space-scaleXl); display: flex; flex-direction: column; gap: var(--space-scaleXl); }
+  .desktop .form { width: 648px; margin: 0 auto; gap: var(--space-scaleS7); }
+  /* PageContainer.Title / .Description (web/packages/ui-shared/src/components/PageContainer), stacked with scaleS4 (16) gap as InsuranceTypeSelector does: Title-lg (700 24/32) left on mobile, Headline-Desk-sm (700 36/44) centred on desktop; Body-md textSecondary. */
+  .heading { display: flex; flex-direction: column; gap: 16px; }
+  .heading h1 { font-size: 24px; line-height: 32px; font-weight: 700; color: #17263c; }
+  .desktop .heading { text-align: center; }
+  .desktop .heading h1 { font-size: 36px; line-height: 44px; }
+  .heading p { color: #434c5c; font-size: 16px; line-height: 24px; font-weight: 400; }
+  .options { display: flex; flex-direction: column; gap: var(--space-scaleXl); }
+
+  /* Policy card, as web/packages/ui-cb/src/screens/Vehicle/Insurance/InsuranceType/components/InsuranceTypeSelector renders it: ActionRowContainer (scaleS3/scaleXl padding, radius-2xl 24, gap 12, getElevation shadow, 600 wide on desktop, 2px #0751c2 focus outline). */
+  .card { border-radius: 24px; background: #ffffff; padding: 12px 24px; box-shadow: 0 0 12px 0 rgba(0,0,0,.07); cursor: pointer; display: flex; flex-direction: column; gap: 12px; }
+  .desktop .card { width: 600px; align-self: center; }
+  .card:focus-visible { outline: 2px solid #0751c2; outline-offset: 0; }
+  /* ActionRow (web/packages/ui-shared/src/components/ActionRow), not highlighted so no inset: row min-height 64 with actionRow.sizeVPadding 16 and sizeHGapMd 16, icon 24 in a 32 box; title Label-Semi-md (600 16/24), subtitle Body-xs (400 12/16) #434c5c. */
+  .card .row { display: flex; align-items: center; gap: 16px; min-height: 64px; padding: 16px 0; }
+  .card .icon { width: 32px; height: 32px; padding: 4px; flex: 0 0 auto; color: #17263c; }
+  .card .txt { flex: 1; }
+  .card .title { font-size: 16px; line-height: 24px; font-weight: 600; color: #17263c; }
+  .card .sub { font-size: 12px; line-height: 16px; font-weight: 400; color: #434c5c; }
+  /* RadioButtonIndicator (web/packages/ui-shared/src/primitives/RadioButton): radioButton.* 24 circle, 1px #c3c7cc, hover #f8f9fa; selected #0751c2 with an 8px white dot. */
+  .radio { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #c3c7cc; background: #ffffff; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  .card:hover .radio:not(.on) { background: #f8f9fa; }
+  .radio.on { background: #0751c2; border-color: #0751c2; }
+  .radio.on::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #ffffff; }
+  /* In-card note: the selected card's YStack (scaleS4 gap, scaleS3 bottom padding) holding a Banner with showIcon={false}. */
+  .card > :last-child:not(.row) { margin-bottom: 12px; }
+  /* InsuranceTypeSelector's disabled card: opacity 0.5, tabIndex -1, aria-disabled. */
+  .card.disabled { opacity: .5; cursor: default; }
+  .card.disabled:hover .radio:not(.on) { background: #ffffff; }
+  .card .buoy { margin-top: 4px; }
+  .card .buoy { align-self: flex-end; font-weight: 700; font-size: 13px; color: var(--color-textSecondary); padding-bottom: 4px; }
+
+  /* Cover group: role=group of Checkbox. No real group exists; legend uses the question label (Title-sm 700 16/22, QuestionFactory), hint Body-sm #434c5c. */
+  .cover { display: flex; flex-direction: column; gap: 8px; padding: 0 24px; }
+  .desktop .cover { width: 600px; align-self: center; }
+  .cover .legend { font-size: 16px; line-height: 22px; font-weight: 700; color: #17263c; }
+  .cover .hint { font-size: 14px; line-height: 20px; color: #434c5c; }
+  /* Checkbox (web/packages/ui-shared/src/primitives/Checkbox): checkbox.* 24 box, radius 4, 1px #c3c7cc, hover #f8f9fa, checked #0751c2 with a 16px lucide Check (stroke 2.25), error border #bc3509, focus 2px #17263c outline; box and label centred, sizeGapHorizontal 16; label Body-md. */
+  .chk { position: relative; display: flex; gap: 16px; align-items: center; padding: 4px 0; cursor: pointer; }
+  .chk input { position: absolute; opacity: 0; width: 44px; height: 44px; left: -10px; top: 50%; margin: -22px 0 0; cursor: pointer; }
+  .chk .box { position: relative; width: 24px; height: 24px; border-radius: 4px; border: 1px solid #c3c7cc; background: #ffffff; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; color: #ffffff; }
+  .chk:hover input:not(:checked) + .box { background: #f8f9fa; }
+  .chk input:checked + .box { background: #0751c2; border-color: #0751c2; }
+  .chk input:focus-visible + .box { outline: 2px solid #17263c; outline-offset: 0; }
+  .cover.invalid .chk input:not(:checked) + .box { border-color: #bc3509; }
+  .chk .l1 { font-size: 16px; line-height: 24px; color: #17263c; }
+  .chk .l2 { font-size: 14px; line-height: 20px; color: #434c5c; }
+  /* Error message, as Checkbox and Input render it: Body-xs (400 12/16) #bc3509. */
+  .error { font-size: 12px; line-height: 16px; color: #bc3509; }
+
+  /* Banner */
+  /* Banner, as web/packages/ui-shared/src/components/Banner renders it: banner.* tokens, lucide icon 24, Label-Bold-sm title, Body-sm description, action centred on the right, fullWidth here. */
+  .banner { display: flex; align-items: flex-start; gap: 8px; border-radius: 8px; padding: 16px; color: #17263c; font-family: 'Figtree', var(--font); font-size: 14px; line-height: 20px; align-self: stretch; }
+  /* Banners on these steps pass fullWidth, so they line up with the cards (as SelectExperience and the Offer banners do). */
+  .banner.error { background: #ffefea; }
+  .banner.warning { background: #fff1d9; }
+  .banner.info { background: #e9f1fc; }
+  .banner .bi { flex: 0 0 24px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+  .banner.error .bi { color: #bc3509; }
+  .banner.warning .bi { color: #ffbc51; }
+  .banner.info .bi { color: #0751c2; }
+  .banner .bm { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .banner .bt { font-weight: 700; }
+  .banner .bd { font-weight: 400; }
+  .banner .bact { align-self: center; flex: 0 0 auto; }
+  .banner .bact .actions { margin: 0; }
+  .banner.plain .bi { display: none; }
+
+  /* Skeleton (web/packages/ui-shared/src/primitives/Skeleton), default colorMode dark: skeleton.colorStep1Dark #eef1f5 / colorStep2Dark #c3c7cc in the [p,s,s,p,s,p] palette, 6x background, 3s sweep. Sized as the policy card (radius 24, 88 tall). */
+  .skeleton { border-radius: 24px; height: 88px; background: linear-gradient(90deg, #eef1f5, #c3c7cc, #c3c7cc, #eef1f5, #c3c7cc, #eef1f5); background-size: 600% 100%; animation: sh 3s infinite linear; }
+  .desktop .skeleton { width: 600px; align-self: center; }
+  @keyframes sh { from { background-position: 100% 0; } to { background-position: 0 0; } }
+  @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+
+  /* ActionFooter (web/packages/ui-cb/src/components/ActionFooter): actionFooter.colorBackgroundColor #fff, getElevation shadow (no border), scaleS4/scaleS3 padding on mobile with the primary stretched, scaleS5 (20) on desktop with the primary at the end. */
+  .footer { position: relative; z-index: 1; box-shadow: 0 0 12px 0 rgba(0,0,0,.07); padding: 16px 12px; display: flex; justify-content: flex-end; background: #ffffff; }
+  .desktop .footer { padding: 20px; }
+  .phone .footer { padding-bottom: 28px; } /* clears the phone frame's rounded corners only */
+  .phone .footer button { width: 100%; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Snackbar (web/packages/ui-shared/src/components/Snackbar), bottom placement: 24 from the bottom and 16 from each side on mobile, 48 from the bottom and 520 (scaleS130) centred on desktop; snackbar.* #17263c, radius 8, padding 16, gap 8; white 24px icon; Label-Bold-sm title over Body-sm description, 2 apart. */
+  .snackbar { position: absolute; z-index: 3; left: 16px; right: 16px; bottom: 24px; background: #17263c; color: #ffffff; border-radius: 8px; padding: 16px; gap: 8px; align-items: center; font-size: 14px; line-height: 20px; display: none; }
+  .desktop .snackbar { left: 50%; right: auto; bottom: 48px; width: 520px; transform: translateX(-50%); }
+  .snackbar.show { display: flex; }
+  .snackbar .si { flex: 0 0 24px; width: 24px; height: 24px; align-self: flex-start; color: #ffffff; }
+  .snackbar .sm { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .snackbar strong { display: block; font-weight: 700; }
+
+  /* Dialog (web/packages/ui-shared/src/primitives/Dialog): overlay.colorDefault; panel white, max 530, radius-3xl 32 (a bottom sheet with top corners only on mobile), getElevation shadow. Header: actionHeader padding 24, #eef1f5 rule, Title-sm (700 16/22) centred. Body header and content: scaleXl padding, content gap 16. Footer: actionFooter padding 24, #eef1f5 rule, primary full width. */
+  .scrim { position: absolute; inset: 0; z-index: 4; background: rgba(67,76,92,.5); display: none; align-items: center; justify-content: center; }
+  .phone .scrim { align-items: flex-end; }
+  .scrim.show { display: flex; }
+  .dialog { background: #ffffff; border-radius: 32px; width: 100%; max-width: 530px; display: flex; flex-direction: column; box-shadow: 0 0 12px 0 rgba(0,0,0,.07); overflow: hidden; }
+  .phone .dialog { border-radius: 32px 32px 0 0; }
+  .dialog .dh { padding: 24px; border-bottom: 1px solid #eef1f5; text-align: center; }
+  .dialog h2 { font-size: 16px; line-height: 22px; font-weight: 700; color: #17263c; }
+  .dialog .dbh { padding: 24px; }
+  .dialog .dbc { padding: 0 24px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .dialog .df { padding: 24px; border-top: 1px solid #eef1f5; }
+  .dialog .df .btn-primary { width: 100%; }
+  /* Underwriting form, laid out as OwnerQuestions / BoatQuestions: questions scaleXl (24) apart. Group legend Title-md (700 18/24), a step above the Title-sm question labels; lead Body-sm #434c5c. */
+  .uw fieldset { border: none; padding: 0; margin: 32px 0 0; display: flex; flex-direction: column; gap: 24px; }
+  .uw legend { font-size: 18px; line-height: 24px; font-weight: 700; color: #17263c; margin-bottom: 4px; padding: 0; }
+  .uw .lead { font-size: 14px; line-height: 20px; color: #434c5c; margin-top: 0; }
+  /* Question, as web/packages/ui-cb/src/components/QuestionFactory renders it: Title-sm (700 16/22) label scaleS4 (16) above the control; hint and error Body-xs 8 below (Input sizeGapSm). */
+  .q { display: flex; flex-direction: column; gap: 8px; }
+  .q > label, .q > .qlabel { font-size: 16px; line-height: 22px; font-weight: 700; color: #17263c; margin-bottom: 8px; }
+  .q .opt { color: #434c5c; font-weight: 400; }
+  .q .help, .q .from { font-size: 12px; line-height: 16px; color: #434c5c; }
+  /* Input (web/packages/ui-shared/src/primitives/Input), floatingLabel off as QuestionFactory uses it: inputTextField.sizeHeight 48, radius 8, 1px #c3c7cc, padding 12 left / 8 right, Body-md #17263c with #434c5c placeholder; hover and focus border #434c5c, keyboard focus adds a 2px #434c5c ring 2 out; error border #bc3509. Select is the same Input with a 16px ChevronDown trailing icon (SelectField). */
+  .q input[type=text], .q input[type=number], .q input[type=date], .q input[type=tel], .q select { width: 100%; height: 48px; border: 1px solid #c3c7cc; border-radius: 8px; padding: 0 8px 0 12px; font-family: inherit; font-size: 16px; line-height: 24px; color: #17263c; background: #ffffff; outline: none; transition: border-color .2s; }
+  .q input::placeholder { color: #434c5c; }
+  .q input:hover, .q select:hover, .q input:focus, .q select:focus { border-color: #434c5c; }
+  .q input:focus-visible, .q select:focus-visible { outline: 2px solid #434c5c; outline-offset: 2px; }
+  .q select { appearance: none; -webkit-appearance: none; padding-right: 32px; cursor: pointer; background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2317263c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center; }
+  .q .money { position: relative; } .q .money span { position: absolute; left: 13px; top: 12px; line-height: 24px; color: #17263c; } .q .money input { width: 100%; padding-left: 30px; }
+  /* Yes / No: QuestionFactory's YesNoField, two Selectors (web/packages/ui-shared/src/primitives/Selector) scaleS4 apart: selector.* height 48, radius 8, 1px #eef1f5, Label-Semi-md; hover fill #f8f9fa; selected fill and border #e9f1fc, label #0751c2 with a 16px Check; focus 2px #17263c outline 1 out. The native radio stays for keyboard and screen readers, visually hidden. */
+  .q .yn { display: flex; gap: 16px; }
+  .q .yn label { position: relative; flex: 1; height: 48px; padding: 12px 16px; border: 1px solid #eef1f5; border-radius: 8px; background: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 16px; line-height: 24px; font-weight: 600; color: #17263c; cursor: pointer; transition: background-color .2s, border-color .2s, color .2s; }
+  .q .yn label:hover { background: #f8f9fa; }
+  .q .yn input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+  .q .yn label:has(input:checked) { background: #e9f1fc; border-color: #e9f1fc; color: #0751c2; }
+  .q .yn label:has(input:checked)::after { content: ''; width: 16px; height: 16px; margin-left: 8px; background: #0751c2; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / contain no-repeat; }
+  .q .yn label:has(input:focus-visible) { outline: 2px solid #17263c; outline-offset: 1px; }
+  .q.invalid input, .q.invalid select, .q.invalid .yn label { border-color: #bc3509; }
+  /* Confirm: Checkbox as TermsAcceptance uses it, drawn on the native input: checkbox.* 24 box, radius 4, #c3c7cc border, hover #f8f9fa, checked #0751c2 with a white 16px Check, error border #bc3509, focus 2px #17263c; Body-md label 16 to the right, centred. */
+  .uw .confirm { display: flex; gap: 16px; align-items: center; margin-top: 32px; font-size: 16px; line-height: 24px; color: #17263c; cursor: pointer; }
+  .uw .confirm + .error { margin-top: 8px; }
+  .uw .confirm input { appearance: none; -webkit-appearance: none; width: 24px; height: 24px; margin: 0; border: 1px solid #c3c7cc; border-radius: 4px; background: #ffffff no-repeat center / 16px 16px; flex: 0 0 auto; cursor: pointer; }
+  .uw .confirm input:hover:not(:checked) { background-color: #f8f9fa; }
+  .uw .confirm input:checked { background-color: #0751c2; border-color: #0751c2; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E"); }
+  .uw .confirm input[aria-invalid="true"]:not(:checked) { border-color: #bc3509; }
+  .uw .confirm input:focus-visible { outline: 2px solid #17263c; outline-offset: 0; }
+  .uw .submit { margin-top: 24px; width: 100%; }
+  .done { padding: 48px 24px; text-align: center; }
+  .done p { margin-top: 8px; color: #434c5c; }
+
+  @media (max-width: 760px) {
+    .layout { flex-direction: column; align-items: stretch; padding: 0; gap: 0; }
+    details.panel-wrap > summary { display: block; padding: 10px 16px; background: #fff; font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 1px solid #ddd; }
+    .panel { width: 100%; border-radius: 0; border: none; position: static; max-height: none; }
+    .panel .phead { border-radius: 0; }
+    .device.phone, .device.desktop { width: 100%; height: auto; min-height: 100vh; border-radius: 0; box-shadow: none; }
+    .desktop .form { width: 100%; }
+    .snackbar { position: fixed; }
+    .footer { position: sticky; bottom: 0; }
+    .viewport-row { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <details class="panel-wrap" id="panelWrap" open>
+    <summary>Prototype controls (tap to open or hide)</summary>
+    <div class="panel" aria-label="Prototype controls, not part of the design">
+      <div class="phead">
+        <div class="eyebrow">Prototype controls</div>
+        <h2>Things to try</h2>
+        <p>Pick one to set up the boat. Each says what to do and what you should see. The screen on the right is the design; this panel is not.</p>
+      </div>
+      <div class="pgroup">
+        <div id="tasks"></div>
+        <div class="brief" id="taskBrief"></div>
+      </div>
+      <div class="pgroup">
+        <div class="viewport-row">
+          <div class="plabel">Viewport</div>
+          <div class="seg" id="viewport"></div>
+        </div>
+        <div class="plabel">Wording of the question</div>
+        <div class="seg" id="wording"></div>
+        <div class="plabel">Where the boat operates</div>
+        <div class="seg" id="location"></div>
+      </div>
+      <div class="pgroup">
+        <div class="plabel">Reading the boat's statement</div>
+        <div class="seg" id="read"></div>
+        <div class="plabel">Make the next save… (once)</div>
+        <div class="seg" id="server"></div>
+        <div class="plabel">Make Buoy answer… (once)</div>
+        <div class="seg" id="buoyAnswer"></div>
+      </div>
+      <div class="pgroup">
+        <div class="plabel">What a screen reader hears</div>
+        <div class="spoken" id="spoken"></div>
+        <div class="plabel">Signals the web emits</div>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+  </details>
+
+  <div class="device phone" id="device">
+    <div class="topbar"><span id="topLeft"></span><span class="topend"><button class="btn-tertiary" id="restart" title="Prototype control: start this task again">Restart</button><span id="topRight"></span></span></div>
+    <div class="scroll" id="scroll">
+      <div class="form" id="form"></div>
+    </div>
+    <div class="footer" id="footer"><button class="btn-primary" id="next"></button><span class="sr-only" id="nextHint"></span></div>
+    <div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+    <div class="scrim" id="scrim"></div>
+  </div>
+</div>
+
+<script>window.PROTO_OPERATOR = true;</script>
+<script>
+/* Copy: every string is an i18n key in ui-cb/locales/en/vehicle.json, namespace vehicle.
+   Keys marked "kept" exist today; the rest are new or changed (see the brief's Copy section). */
+const COPY = {
+  heading: 'What does this boat’s insurance cover?',                                     // insurance_type.heading, changed (wording A)
+  description: 'Trips that guests pay for need cover before you can publish them.',          // insurance_type.description, changed (wording A)
+  next: 'Next', save: 'Save',                                                            // kept
+  next_disabled_hint: 'Choose what the insurance covers to continue',                    // changed (wording A)
+  rec_title: 'Only my own use', rec_sub: 'A personal or recreational policy',             // changed (wording A); stores a personal policy
+  rec_US_note: 'We’ll check if Buoy can cover your paying trips.',                         // new: shown before choosing, US
+  rec_away_title: 'We can’t arrange cover here yet', rec_away_note: 'You won’t be able to publish trips with this policy. You can still carry on setting up the boat.', // new: shown before choosing, outside the US (2.5)
+  rec_US: 'Boatsetter partners with Buoy to provide supplemental insurance for your boat.', // kept
+  rec_Others: loc => `Supplemental insurance isn’t offered in ${loc}. Commercial insurance is needed.`, // kept today, no longer shown: 2.5's warning replaces it in the card
+  com_title: 'Trips that guests pay for', com_sub: 'Rentals, charters or hire, whoever your insurer is', // changed (wording A); stores a commercial policy
+  com_FL: 'Proof of insurance required. Supplemental insurance required under FL SB606.', // kept today, no longer shown: split into com_Others and com_SB606
+  com_SB606: 'Florida’s SB 606 law needs supplemental insurance when the guest drives.',  // new: only for a Florida boat with the guest box ticked
+  com_Others: 'Proof of insurance will be required. You’ll need to upload a document at a later step.', // kept, now only while no document is on file
+  cover_legend: 'Who can be driving?',
+  cover_hint: 'Choose all that apply.',
+  crewed: 'Me, or a captain I choose', crewed_hint: '',                                  // changed (wording A); stores crewed charters
+  bareboat: 'The guest, or a captain the guest chooses', bareboat_hint: '',               // changed (wording A); stores bareboat rentals
+  no_cover: 'Choose who can be driving when the policy covers a paying trip.',            // changed (wording A)
+  load_error_title: 'We couldn’t load the boat’s insurance',
+  load_error_desc: 'Check your connection and try again.',
+  retry: 'Try again',
+  not_saved_title: 'The policy wasn’t saved',
+  not_saved_desc: 'We couldn’t confirm the boat’s policy was saved. Your answers are still here. Please try again.',
+  not_permitted_title: 'You can’t change this boat',
+  not_permitted_desc: 'You can’t change this boat. Ask someone in your organization who can edit boats to add its insurance details.', // save_forbidden_description, kept
+  no_location_title: 'Add the boat’s location first',
+  no_location_desc: 'A policy is stated for the place the boat operates. Add the boat’s location, then come back here.',
+  no_location_action: 'Add the boat’s location',
+  no_location_hint: 'Add the boat’s location before you state its policy',
+  saved_title: 'Saved', saved_desc: 'Your changes have been saved.',                     // vehicle_edit.update_*, kept
+  inel_title: 'Ineligible boat', inel_sub: 'This boat is not currently eligible for listing',
+  inel_head: 'Recreational insurance not available in your area',
+  inel_body: 'Recreational insurance is currently only available for boats registered in the United States.',
+  inel_btn: 'Save and exit',
+};
+
+// The three wordings from the pod's review. Each asks the same thing and stores the same statement;
+// only the words differ. A is COPY as written above.
+const COPY_A = { ...COPY };
+const WORDINGS = {
+  A: { label: 'A: what it covers', copy: {}, order: ['recreational', 'commercial'] },
+  B: { label: 'B: labels, explained', order: ['recreational', 'commercial'], copy: {
+    heading: 'What kind of policy does this boat have?',
+    next_disabled_hint: 'Choose the kind of policy to continue',
+    rec_title: 'Recreational', rec_sub: 'Covers only my own use',
+    com_title: 'Commercial', com_sub: 'Covers trips that guests pay for',
+    cover_legend: 'Which trips does it cover?',
+    bareboat: 'Bareboat rentals (the guest drives)', crewed: 'Crewed charters (I or my captain drive)',
+    no_cover: 'Choose which trips the commercial policy covers.',
+    com_SB606: 'Florida’s SB 606 law needs supplemental insurance for bareboat rentals.',
+  } },
+  C: { label: 'C: one yes/no', order: ['commercial', 'recreational'], copy: {
+    heading: 'Does this boat’s insurance cover trips that guests pay for?',
+    next_disabled_hint: 'Answer yes or no to continue',
+    com_title: 'Yes', com_sub: '',
+    rec_title: 'No, it only covers my own use', rec_sub: '',
+  } },
+};
+let wording = 'A';
+function applyWording(k) { wording = k; Object.keys(COPY).forEach(key => delete COPY[key]); Object.assign(COPY, COPY_A, WORDINGS[k].copy); }
+
+// The step after a saved statement, as section 2 of the scenarios orders it. insurance-service's
+// GetInsuranceCompliance answers what each driver needs; the wizard takes the first unmet need.
+// Draft copy for the next steps: section 2 has no design yet.
+const NEXT = {
+  buoy: { scenario: '2.1', title: 'Buoy’s underwriting questions',
+    body: 'Buoy insures trips on this boat. Answer a few questions about you, your contact details and the boat so Buoy can review it.',
+    action: 'Start the questions' },
+  sb606: { scenario: '2.4', title: 'How is SB 606 cover arranged?',
+    body: 'Florida’s SB 606 law needs extra cover for bareboat rentals. Choose how this boat meets it.' },
+  declare: { scenario: '4', title: 'Declare SB 606 cover',
+    body: 'Confirm the boat has SB 606 cover arranged outside Boatsetter. You won’t need Buoy for it.',
+    action: 'Confirm' },
+  awaiting: { scenario: '2.2', title: 'Waiting for Buoy’s decision',
+    body: 'Buoy is reviewing the boat. We’ll let you know when they decide. You can carry on setting up the boat now; it can take bookings once Buoy approves it.',
+    footer: true },
+  approved: { scenario: '2.3', title: 'Buoy approved the boat',
+    body: 'Buoy will cover trips on this boat. The boat’s insurance is done.',
+    footer: true },
+  denied: { scenario: '6.1', title: 'Buoy won’t cover this boat',
+    body: '',   // built in bodyOf: it names the state, and a denial carries Buoy's reasons about the boat (6.4)
+    footer: true },
+  document: { scenario: '5.1', title: 'Upload the insurance document',
+    body: 'Upload the boat’s commercial insurance policy so we can check it.',
+    action: 'Upload document' },
+  noTrips: { scenario: '2.5', title: 'This boat can’t take paying trips yet',
+    body: 'A personal policy doesn’t cover paying trips. You can carry on setting up the boat, but you can’t publish trips until it has a commercial policy.',
+    action: 'Change the policy' },
+};
+// Underwriting questions as GetUnderwritingQuestions returns them: grouped by role, in Buoy's own
+// wording, with the platform fact a question can be pre-filled from.
+const UW_ROLES = [
+  ['operator', 'About you', 'Buoy asks these about you as the boat’s operator.'],
+  ['contact', 'Your contact details', 'Buoy uses these to set you up.'],
+  ['vehicle', 'About the boat', 'Buoy asks these about the boat.'],
+];
+// Buoy's real question set, from api/mocks/insurance/InsuranceService/GetUnderwritingQuestions/default.yaml,
+// in the order insurance-service returns it. `fact` is the question's prefill_from.
+const UW_QUESTIONS = [
+  {"role":"operator","id":"largeInsuranceClaims","text":"Have you had combined boat insurance claim(s) exceeding $50,000, 2+ losses, or any constructive total vessel losses in the last 3 years?","kind":"yes_no","required":true},
+  {"role":"operator","id":"ownerFelonyConvictions","text":"Have you had any criminal convictions in the last 10 years or any felony convictions ever?","kind":"yes_no","required":true},
+  {"role":"operator","id":"exceedingCapacity","text":"Are you offering bookings where the number of passengers exceeds the U.S. Coast Guard Capacity Plate including maximum persons, the number of persons permitted under applicable law, maximum gross load, or maximum horsepower?","kind":"yes_no","required":true},
+  {"role":"operator","id":"numberOfYearsOperatingRentalFacility","text":"How many years have you been operating a boat rental business?","kind":"number","required":true},
+  {"role":"operator","id":"bankruptcy","text":"Have you had any bankruptcies in the last 5 years?","kind":"yes_no","required":true},
+  {"role":"operator","id":"company_name","text":"Company Name","kind":"text","required":false},
+  {"role":"operator","id":"commercialOperator","text":"Do you operate your rentals as a registered business entity?","kind":"yes_no","required":false},
+  {"role":"operator","id":"markelPolicy","text":"Do you have a Markel Policy?","kind":"yes_no","required":false},
+  {"role":"contact","id":"first_name","text":"First name","kind":"text","required":true,"fact":"OPERATOR_GIVEN_NAME"},
+  {"role":"contact","id":"last_name","text":"Last name","kind":"text","required":true,"fact":"OPERATOR_FAMILY_NAME"},
+  {"role":"contact","id":"email","text":"Email","kind":"text","required":true,"fact":"OPERATOR_EMAIL"},
+  {"role":"contact","id":"phone","text":"Phone number","kind":"phone","required":true,"fact":"OPERATOR_PHONE"},
+  {"role":"contact","id":"birthdate","text":"Birthday","kind":"date","required":true,"fact":"OPERATOR_BIRTH_DATE"},
+  {"role":"vehicle","id":"modificationsAttestation","text":"Has the boat been customized, modified, or altered from the original manufacturer's specifications?","kind":"yes_no","required":true},
+  {"role":"vehicle","id":"boat_address_line_2","text":"Vessel address line 2","kind":"text","required":false,"fact":"VEHICLE_ADDRESS_LINE_2"},
+  {"role":"vehicle","id":"boat_address_state","text":"Vessel state","kind":"text","required":true,"fact":"VEHICLE_ADDRESS_STATE"},
+  {"role":"vehicle","id":"boat_type","text":"Type","kind":"choice","required":true,"choices":["Power","Sail"],"fact":"VEHICLE_TYPE"},
+  {"role":"vehicle","id":"existingInsurancePolicies","text":"In addition to Buoy's coverage, do you have and will you maintain an underlying insurance policy?","kind":"yes_no","required":true},
+  {"role":"vehicle","id":"boat_make","text":"Boat make","kind":"text","required":true,"fact":"VEHICLE_MAKE"},
+  {"role":"vehicle","id":"boat_model","text":"Boat model","kind":"text","required":true,"fact":"VEHICLE_MODEL"},
+  {"role":"vehicle","id":"boat_year","text":"Year of manufacturing","kind":"number","required":true,"fact":"VEHICLE_YEAR"},
+  {"role":"vehicle","id":"boat_length","text":"Length (in feet)","kind":"number","required":true,"fact":"VEHICLE_LENGTH_FEET"},
+  {"role":"vehicle","id":"boat_engine_count","text":"Number of engines","kind":"number","required":true,"fact":"VEHICLE_ENGINE_COUNT"},
+  {"role":"vehicle","id":"boat_horsepower","text":"Horsepower","kind":"number","required":true,"fact":"VEHICLE_ENGINE_HORSEPOWER"},
+  {"role":"vehicle","id":"boat_address_city","text":"Vessel city","kind":"text","required":true,"fact":"VEHICLE_ADDRESS_CITY"},
+  {"role":"vehicle","id":"boat_category","text":"Category","kind":"choice","required":true,"choices":["Airboat","Aluminum fishing","Angler","Bass boat","Bay boat","Berge","Board","Bow rider","Canoe","Catamaran","Center console","Classic","Commercial","Convertible","Cruiser","Cruiser racer","Cuddy Cabin","Cutter","Daysailer","Deck boat","Dive boat","Double decker","Downeast","Dual console","Duck boat","Electric","Express","Express cruiser","Fish and ski","Flats boat","Flybridge","Jet ski","Jon boat","Kayak","Ketch","Mega yacht","Motor yacht","Motorsailer","Offshore sport fishing","Other","Performance","Performance fishing","Pilothouse","Pontoon","PWC","Racer","Rigid inflatable","Runabout","Sailboat","Saltwater fishing","Schooner","Sendan bridge","Ski and wakeboard","Skiff","Sloop","Tedt","Trawler","Trimaran","Walkaround","Weekender","Yawl"],"fact":"VEHICLE_CATEGORY"},
+  {"role":"vehicle","id":"attachmentsAttestation","text":"Are there any crafts or apparatuses attached to the boat? (Examples are flyboard, parasail etc.)","kind":"yes_no","required":true},
+  {"role":"vehicle","id":"boat_max_capacity","text":"Max number of passengers","kind":"number","required":true,"fact":"VEHICLE_MAX_PASSENGERS"},
+  {"role":"vehicle","id":"boat_address_zip","text":"Vessel ZIP","kind":"text","required":true,"fact":"VEHICLE_ADDRESS_POSTAL_CODE"},
+  {"role":"vehicle","id":"seaWorthiness","text":"Will the boat be seaworthy during all charters?","kind":"yes_no","required":true},
+  {"role":"vehicle","id":"racingExperimentalAttestation","text":"Is the boat designed for racing or experimental purposes?","kind":"yes_no","required":true},
+  {"role":"vehicle","id":"boat_has_custom_classification","text":"Is the boat classified as any of the following: a submersible, conversion, hovercraft, hydrofoil, hydroplane, shuttle craft, repurposed military vessel, homemade vessel, personal watercraft such as jet-skis, or similar?","kind":"yes_no","required":true},
+  {"role":"vehicle","id":"boat_has_captain","text":"Will the boat be driven by a United States Coast Guard licensed captain? Note: Boats over 33 feet are required to be captained","kind":"yes_no","required":true},
+  {"role":"vehicle","id":"boat_value","text":"Boat value","kind":"amount","required":true},
+  {"role":"vehicle","id":"boat_address_line_1","text":"Vessel address line 1","kind":"text","required":true,"fact":"VEHICLE_ADDRESS_LINE_1"},
+];
+// factValue is the sample value the platform holds for a prefill fact, for the task's boat.
+function factValue(fact) {
+  const fl = loc().region === 'FL';
+  return ({
+    OPERATOR_GIVEN_NAME: 'Alex', OPERATOR_FAMILY_NAME: 'Rivera', OPERATOR_EMAIL: 'alex.rivera@example.com',
+    OPERATOR_PHONE: '+1 305 555 0142', OPERATOR_BIRTH_DATE: '',
+    VEHICLE_MAKE: 'Boston Whaler', VEHICLE_MODEL: '320 Vantage', VEHICLE_YEAR: '2019', VEHICLE_LENGTH_FEET: '32',
+    VEHICLE_TYPE: 'Power', VEHICLE_CATEGORY: 'Center console', VEHICLE_ENGINE_COUNT: '2', VEHICLE_ENGINE_HORSEPOWER: '600',
+    VEHICLE_MAX_PASSENGERS: '12',
+    VEHICLE_ADDRESS_LINE_1: fl ? '401 Biscayne Blvd' : '1380 Harbor Island Dr', VEHICLE_ADDRESS_LINE_2: '',
+    VEHICLE_ADDRESS_CITY: fl ? 'Miami' : 'San Diego', VEHICLE_ADDRESS_STATE: loc().region, VEHICLE_ADDRESS_POSTAL_CODE: fl ? '33132' : '92101',
+  })[fact] ?? '';
+}
+// Buoy can answer a submission at once: approved, or, for a boat it already holds, denied or deactivated (rare: 29 of 13,664 in BS4).
+const BUOY_OPTIONS = [['ok', 'Submitted, awaiting decision'], ['approved', 'Approved at once'], ['denied', 'Denied (boat Buoy already holds)'], ['deactivated', 'Deactivated (boat Buoy already holds)'], ['unavailable', 'UNAVAILABLE'], ['held', 'Held by another operator'], ['internal', 'INTERNAL']];
+const UW_COPY = {
+  required: 'Answer this question.',
+  summary: n => `${n} ${n === 1 ? 'question needs' : 'questions need'} an answer before you can send them to Buoy.`,
+  confirm: 'I confirm these answers are true and complete.',
+  confirm_error: 'Confirm your answers before sending them.',
+  submit: 'Send to Buoy', submitting: 'Sending…',
+  from_profile: 'From your profile', from_boat: 'From the boat’s details',
+  optional: '(optional)',
+  known_title: (n, where) => `We answered ${n} ${n === 1 ? 'question' : 'questions'} from ${where}`,
+  known_where: { contact: 'your profile', vehicle: 'the boat’s details' },
+  review: 'Review them', hide: 'Hide them',
+  unavailable_title: 'Your answers weren’t sent', unavailable_desc: 'We couldn’t reach Buoy. Your answers are still here. Please try again.',
+  held_title: 'Buoy already insures this boat for someone else', held_desc: 'Buoy has this boat under another operator, perhaps from a previous owner. Contact support to sort it out.',
+  internal_title: 'Something went wrong on our side', internal_desc: 'We’re working on it, and it may take a few days. Your answers are kept, so you can come back and send them later.',
+};
+
+const SB606_OPTIONS = [
+  ['buoy', 'Through Buoy', 'Answer Buoy’s underwriting questions.'],
+  ['declare', 'Arranged elsewhere', 'I already have SB 606 cover outside Boatsetter.'],
+];
+
+// todayStep is where the live wizard goes from the same answers, for the facilitator to compare.
+function todayStep(type) {
+  if (type === 'recreational') return isUS() ? 'Owner questions' : 'the ineligible dialog';
+  return loc().region === 'FL' ? 'Owner questions' : 'Upload documents';
+}
+
+// nextStep follows section 2's order for a boat not yet submitted to Buoy, with no SB 606 way
+// chosen and no insurance document: personal outside the US covers nothing (2.5); a Florida
+// bareboat cover needs SB 606 met (2.4); Buoy underwrites a personal policy in the US (2.1);
+// a commercial policy owes its document (5.1).
+function nextStep(type, cover) {
+  if (type === 'recreational') return isUS() ? 'buoy' : 'noTrips';
+  if (cover.includes('bareboat') && loc().country === 'US' && loc().region === 'FL') return 'sb606';
+  return 'document';
+}
+
+const LOCATIONS = {
+  miami:     { label: 'Miami, FL, US', country: 'US', region: 'FL', name: 'United States' },
+  sandiego:  { label: 'San Diego, CA, US', country: 'US', region: 'CA', name: 'United States' },
+  capetown:  { label: 'Cape Town, ZA', country: 'ZA', region: 'WC', name: 'South Africa' },
+  firenze:   { label: 'Firenze, IT (region FL)', country: 'IT', region: 'FL', name: 'Italy' },
+  none:      { label: 'No location', country: '', region: '', name: '' },
+};
+
+const TASKS = [
+  { id: 'florida', title: '1. A Florida boat: guests drive, or you do',
+    try: 'Choose “Trips that guests pay for”, tick both drivers, then press Next.',
+    expect: 'Ticking “The guest, or a captain the guest chooses” adds the SB 606 note to the card. Next saves, and you’re asked how SB 606 cover is arranged. Pick Through Buoy to see Buoy’s questions.',
+    mode: 'add', location: 'miami', stored: null },
+  { id: 'nocover', title: '2. Skip who can be driving',
+    try: 'Choose “Trips that guests pay for” and press Next without ticking who can be driving.',
+    expect: 'An error asks who can be driving. Tick one and Next works.',
+    mode: 'add', location: 'sandiego', stored: null },
+  { id: 'nolocation', title: '3. A boat with no location yet',
+    try: 'Try to choose a policy.',
+    expect: 'Both options are greyed out, and a warning says to add the boat’s location first. Add it, and you can choose.',
+    mode: 'add', location: 'none', stored: null },
+  { id: 'retry', title: '4. The save fails',
+    try: 'State a recreational policy and press Next. This first save is set to fail.',
+    expect: 'A “policy wasn’t saved” message, with your answers kept. Press Next again: it saves and Buoy’s questions follow.',
+    mode: 'add', location: 'sandiego', stored: null, server: 'unavailable' },
+  { id: 'edit', title: '5. Edit a boat: its policy now covers guests driving too',
+    try: 'This boat’s policy covers paying trips you or your captain drive. Tick “The guest, or a captain the guest chooses” and Save. Then Save again without changing anything.',
+    expect: 'No note about uploading proof of insurance, since its document is already on file. “Saved” both times. The signal log’s routing line says NONE for the second, because nothing was sent.',
+    mode: 'edit', location: 'sandiego', stored: { type: 'commercial', cover: ['crewed'] }, hasDocument: true },
+  { id: 'capetown', title: '6. Own-use insurance outside the US',
+    try: 'Read “Only my own use” for this Cape Town boat before choosing anything. Then choose it and press Next.',
+    expect: 'Before you choose it, the option already says we can’t arrange cover here yet, so you won’t be able to publish trips. You can still choose it (it may be the policy you hold): Next saves and you carry on setting up the boat. In San Diego the same option says Buoy may cover your paying trips instead.',
+    mode: 'add', location: 'capetown', stored: null },
+];
+
+const READ_OPTIONS = [['ok', 'Answers'], ['loading', 'Still loading'], ['fail', 'Fails'], ['forbidden', 'Refused (not permitted)']];
+const SERVER_OPTIONS = [['ok', 'Saves'], ['unchanged', 'Already current (UNCHANGED)'], ['no_cover', 'no_cover'], ['not_permitted', 'not_permitted'], ['unavailable', 'unavailable'], ['no_location', 'no_location']];
+
+// Operator mode: a build for an operator outside the US. One boat in Cape Town, wording A, and the
+// panel reduced to a short introduction. Set by the build (window.PROTO_OPERATOR) or #operator.
+const OPERATOR = !!window.PROTO_OPERATOR || location.hash === '#operator';
+
+let s, viewport = window.matchMedia('(max-width: 760px)').matches ? 'phone' : 'desktop';  // desktop unless opened on a phone
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+const newState = task => ({
+  task, mode: task.mode, location: task.location, read: 'ok',
+  server: task.server || 'ok',
+  hasDocument: !!task.hasDocument,
+  stored: task.stored ? { type: task.stored.type, cover: [...task.stored.cover] } : null,
+  view: null, selected: undefined, cover: new Set(),
+  coverError: false, saveError: null, noLocationShown: false, emittedNoLocation: false,
+  submitting: false, done: null, next: null, uw: null, uwKnown: null, uwReview: {}, uwErrors: null, uwConfirmed: false, uwConfirmError: false, uwSending: false, uwError: null, buoy: 'ok', dialog: false, snack: null, onDetails: false,
+});
+
+const loc = () => LOCATIONS[s.location];
+const isUS = () => loc().country === 'US';
+const isFL = () => isUS() && loc().region === 'FL';                       // D2.4: Florida requires the US
+const personalNoTrips = () => s.selected === 'recreational' && hasLocation() && !isUS();   // 2.5, shown on selection
+const hasLocation = () => !!loc().country && (!isUS() || /^[A-Z]{2}$/.test(loc().region));
+
+function say(text) { $('spoken').textContent = text; }
+function emit(name, attrs) {
+  const line = document.createElement('div');
+  line.textContent = name + (attrs ? ' ' + JSON.stringify(attrs) : '');
+  $('log').prepend(line);
+}
+const policyKey = (type, cover) => type === 'recreational' ? 'personal'
+  : cover.length === 2 ? 'commercial_both' : cover[0] === 'crewed' ? 'commercial_crewed' : 'commercial_bareboat';
+
+function loadStatement() {
+  if (s.read !== 'ok') return;
+  s.view = s.stored ? { type: s.stored.type, cover: [...s.stored.cover].sort() } : null;
+  s.selected = s.stored ? s.stored.type : undefined;
+  s.cover = new Set(s.stored ? s.stored.cover : []);
+  if (!hasLocation()) showNoLocation();
+}
+
+function showNoLocation() {
+  s.noLocationShown = true;
+  if (!s.emittedNoLocation) {
+    s.emittedNoLocation = true;
+    emit('boat_insurance.not_saved.no_location', { source: 'web', what: 'statement' });
+  }
+}
+
+const BANNER_ICONS = {
+  error: '<circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>',
+  warning: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+};
+function banner(variant, title, desc, extra = '', id = '') {
+  const role = variant === 'error' ? 'role="alert" aria-live="assertive"' : 'role="status" aria-live="polite"';
+  return `<div class="banner ${variant}" ${role} ${id ? `id="${id}"` : ''}>
+    <span class="bi" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${BANNER_ICONS[variant]}</svg></span>
+    <div class="bm">${title ? `<span class="bt">${esc(title)}</span>` : ''}<span class="bd">${esc(desc)}</span></div>
+    ${extra ? `<div class="bact">${extra}</div>` : ''}
+  </div>`;
+}
+
+const ICONS = {
+  sail: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 18H2a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4Z"/><path d="M21 14 10 2 3 14h18Z"/><path d="M10 2v16"/></svg>',
+  building: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>',
+};
+
+function card(type) {
+  const on = s.selected === type;
+  const rec = type === 'recreational';
+  const title = rec ? COPY.rec_title : COPY.com_title;
+  const sub = rec ? COPY.rec_sub : COPY.com_sub;
+  const locked = s.noLocationShown;   // nothing can be stated until the boat has a place (2.7), and the banner says why
+  let body = '';
+  const quiet = html => html.replace(/role="[a-z]+" aria-live="[a-z]+"/, '');
+  const why = rec && hasLocation() && !locked;
+  if (why) {
+    // Own use: the consequence shows on the option before it is chosen (pod review). The option stays, so an operator
+    // whose policy is personal states it truthfully (1.1); outside the US that is 2.5.
+    body = `<div id="rec-why">${isUS()
+      ? quiet(banner('info', '', COPY.rec_US_note)).replace('class="banner', 'class="banner plain')
+      : quiet(banner('warning', COPY.rec_away_title, COPY.rec_away_note))}</div>` + (isUS() ? '<span class="buoy" aria-hidden="true">Buoy</span>' : '');
+  } else if (on && !rec) {
+    // Paying trips (pod review): the document note only while no document is on file, the SB 606 note only for Florida when the guest drives.
+    const desc = [s.hasDocument ? '' : COPY.com_Others, isFL() && s.cover.has('bareboat') ? COPY.com_SB606 : ''].filter(Boolean).join(' ');
+    if (desc) body = `<div>${quiet(banner('warning', '', desc)).replace('class="banner', 'class="banner plain')}</div>`;
+  }
+  return `<div class="card${locked ? ' disabled' : ''}" role="radio" tabindex="${locked ? -1 : 0}" aria-checked="${on}" ${locked ? 'aria-disabled="true" aria-describedby="noLoc"' : ''} ${why ? 'aria-describedby="rec-why"' : ''} aria-label="${esc(title)}${sub ? ` - ${esc(sub)}` : ''}" data-type="${type}">
+    <div class="row">${rec ? ICONS.sail : ICONS.building}<div class="txt"><div class="title">${esc(title)}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div><span class="radio ${on ? 'on' : ''}" aria-hidden="true"></span></div>
+    ${body}
+  </div>`;
+}
+
+const CHECK_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+function coverGroup() {
+  if (s.selected !== 'commercial') return '';
+  const box = (key, label, hint) => `<label class="chk"><input type="checkbox" data-cover="${key}" ${s.cover.has(key) ? 'checked' : ''}
+      ${s.coverError ? 'aria-invalid="true"' : ''} ${hint ? `aria-describedby="cv-${key}-hint"` : ''}><span class="box" aria-hidden="true">${s.cover.has(key) ? CHECK_SVG : ''}</span>
+      <span><span class="l1">${esc(label)}</span>${hint ? `<span class="l2" id="cv-${key}-hint" style="display:block">${esc(hint)}</span>` : ''}</span></label>`;
+  return `<div class="cover ${s.coverError ? 'invalid' : ''}" role="group" aria-labelledby="cv-legend" aria-describedby="cv-hint${s.coverError ? ' cv-error' : ''}" id="coverGroup">
+    <div class="legend" id="cv-legend">${esc(COPY.cover_legend)}</div>
+    <div class="hint" id="cv-hint">${esc(COPY.cover_hint)}</div>
+    ${box('bareboat', COPY.bareboat, COPY.bareboat_hint)}
+    ${box('crewed', COPY.crewed, COPY.crewed_hint)}
+    <div id="cv-live" aria-live="polite">${s.coverError ? `<p class="error" id="cv-error">${esc(COPY.no_cover)}</p>` : ''}</div>
+  </div>`;
+}
+
+function render() {
+  const desktop = viewport === 'desktop';
+  $('device').className = 'device ' + viewport;
+  $('topLeft').textContent = s.mode === 'edit' ? '‹ Back to boats' : 'Add a boat · Insurance';
+  $('topRight').textContent = s.mode === 'edit' ? 'Insurance' : '';
+
+  const form = $('form');
+  const footer = $('footer');
+  footer.style.display = '';
+
+  if (s.onDetails) {
+    footer.style.display = 'none';
+    form.innerHTML = `<div class="heading"><h1>Boat Location</h1><p>Where the boat is legally stored when not in use.</p></div>
+      <p class="hint">This stands in for the details step, where the location is asked. Pick one to give the boat a location.</p>
+      <div class="seg" style="display:flex;gap:8px;flex-wrap:wrap">${['miami','sandiego','capetown'].map(k => `<button class="btn-neutral" data-setloc="${k}">${LOCATIONS[k].label}</button>`).join('')}</div>`;
+    return;
+  }
+  if (s.next) {
+    const n = NEXT[s.next];
+    footer.style.display = n && n.footer ? '' : 'none';
+    if (n && n.footer) { const nb = $('next'); nb.textContent = COPY.next; nb.removeAttribute('aria-disabled'); nb.removeAttribute('aria-describedby'); }
+    form.innerHTML = renderNext();
+    return;
+  }
+  if (s.done) {
+    footer.style.display = 'none';
+    form.innerHTML = `<div class="done"><h1>Next step</h1><p>${esc(s.done)}</p></div>`;
+    return;
+  }
+
+  let html = `<div class="heading"><h1 id="hd">${esc(COPY.heading)}</h1><p id="ds">${esc(COPY.description)}</p></div>`;
+
+  if (s.read === 'fail') {
+    html += banner('error', COPY.load_error_title, COPY.load_error_desc,
+      `<div class="actions"><button class="btn-tertiary sm" id="retryRead">${esc(COPY.retry)}</button></div>`);
+  } else if (s.read === 'forbidden') {
+    html += banner('warning', COPY.not_permitted_title, COPY.not_permitted_desc);
+  } else if (s.read === 'loading') {
+    html += `<div class="options" aria-busy="true"><div class="skeleton"></div><div class="skeleton"></div></div>`;
+  } else {
+    if (s.noLocationShown) {
+      html += banner('warning', COPY.no_location_title, COPY.no_location_desc,
+        `<div class="actions"><button class="btn-tertiary sm" id="goDetails">${esc(COPY.no_location_action)}</button></div>`, 'noLoc');
+    }
+    html += `<div class="options" role="radiogroup" aria-labelledby="hd" aria-describedby="ds" aria-required="true">${WORDINGS[wording].order.map(card).join('')}</div>`;
+    html += coverGroup();
+    if (s.saveError === 'unavailable') html += banner('error', COPY.not_saved_title, COPY.not_saved_desc, '', 'saveErr');
+    if (s.saveError === 'not_permitted') html += banner('warning', COPY.not_permitted_title, COPY.not_permitted_desc, '', 'saveErr');
+  }
+  form.innerHTML = html;
+
+  const next = $('next');
+  next.textContent = s.mode === 'edit' ? COPY.save : COPY.next;
+  const disabledReason = s.read !== 'ok' ? COPY.next_disabled_hint
+    : s.noLocationShown ? COPY.no_location_hint
+    : s.selected === undefined ? COPY.next_disabled_hint : '';
+  const disabled = !!disabledReason || s.submitting;
+  next.setAttribute('aria-disabled', disabled);
+  next.setAttribute('aria-busy', s.submitting);
+  if (s.submitting) next.textContent = '…';
+  $('nextHint').textContent = disabledReason;
+  next.setAttribute('aria-describedby', disabledReason ? 'nextHint' : '');
+}
+
+function select(type) {
+  if (s.submitting || s.noLocationShown) return;
+  s.selected = type;   // cover ticks stay in s.cover while recreational is chosen, so a mis-tap loses nothing
+  render();
+  say(`${type === 'recreational' ? COPY.rec_title : COPY.com_title}, radio button, checked${personalNoTrips() ? `. ${COPY.rec_away_title}. ${COPY.rec_away_note}` : ''}`);
+}
+
+function toggleCover(key, on) {
+  on ? s.cover.add(key) : s.cover.delete(key);
+  if (key === 'bareboat' && on && isFL()) say(COPY.com_SB606);
+  if (s.cover.size) s.coverError = false;
+  render();
+  const el = document.querySelector(`[data-cover="${key}"]`); if (el) el.focus();
+}
+
+function unchangedFromView() {
+  if (!s.view) return false;
+  const cover = s.selected === 'commercial' ? [...s.cover].sort() : [];
+  return s.view.type === s.selected && JSON.stringify(s.view.cover) === JSON.stringify(cover);
+}
+
+function finishSaved(outcome) {
+  const cover = s.selected === 'commercial' ? [...s.cover].sort() : [];
+  const key = policyKey(s.selected, cover);
+  if (outcome === 'STATED') emit(`boat_insurance.stated.${key}`);
+  if (outcome === 'RESTATED') emit(`boat_insurance.restated.${key}`);
+  s.stored = { type: s.selected, cover };
+  s.view = { type: s.selected, cover };
+  const next = nextStep(s.selected, cover);
+  emit(`routing: ${outcome}, next ${NEXT[next].scenario} ${NEXT[next].title} (today's wizard: ${todayStep(s.selected)})`);
+  if (s.mode === 'edit') { snack(COPY.saved_title, COPY.saved_desc); render(); return; }
+  if (next === 'noTrips') {
+    // The 2.5 warning showed on selection, so Next saves and moves on: decision 14, an incomplete insurance section blocks publishing, never setting up the boat.
+    s.done = `The wizard moves on to the step after insurance: “Who can operate your boat?” The insurance section stays incomplete, so ${OPERATOR ? 'trips' : 'offers'} with this boat can’t be published. End of the prototype.`;
+    render(); say(s.done); return;
+  }
+  goNext(next);
+}
+
+function goNext(key) {
+  s.next = key;
+  render();
+  const n = NEXT[key];
+  say(`${n.title}. ${bodyOf(key)}`);
+  const h = $('nextHd'); if (h) h.focus();
+}
+
+function uwField(q) {
+  const v = s.uw[q.id] ?? '';
+  const err = s.uwErrors && s.uwErrors.has(q.id);
+  const from = '';  // a known answer sits in its group's card, whose title says where it came from
+  const ids = [q.help ? `uw-${q.id}-help` : '', from ? `uw-${q.id}-from` : '', err ? `uw-${q.id}-err` : ''].filter(Boolean).join(' ');
+  const aria = `${ids ? `aria-describedby="${ids}"` : ''} ${err ? 'aria-invalid="true"' : ''} ${q.required ? 'aria-required="true"' : ''}`;
+  const label = `${esc(q.text)}${q.required ? '' : ` <span class="opt">${UW_COPY.optional}</span>`}`;
+  let control;
+  if (q.kind === 'yes_no') {
+    control = `<div class="qlabel" id="uw-${q.id}-l">${label}</div><div class="yn" role="radiogroup" aria-labelledby="uw-${q.id}-l" ${aria}>${['Yes', 'No'].map(o =>
+      `<label><input type="radio" name="uw-${q.id}" value="${o}" data-uw="${q.id}" ${v === o ? 'checked' : ''}>${o}</label>`).join('')}</div>`;
+  } else if (q.kind === 'choice') {
+    control = `<label for="uw-${q.id}">${label}</label><select id="uw-${q.id}" data-uw="${q.id}" ${aria}><option value="">Choose one</option>${q.choices.map(c => `<option ${v === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select>`;
+  } else {
+    const type = { number: 'number', date: 'date', phone: 'tel' }[q.kind] || 'text';
+    const input = `<input id="uw-${q.id}" type="${q.kind === 'amount' ? 'text' : type}" ${q.kind === 'amount' ? 'inputmode="decimal"' : ''} ${q.kind === 'number' ? 'inputmode="numeric"' : ''} value="${esc(v)}" data-uw="${q.id}" ${aria}>`;
+    control = `<label for="uw-${q.id}">${label}</label>${q.kind === 'amount' ? `<div class="money"><span aria-hidden="true">$</span>${input}</div>` : input}`;
+  }
+  return `<div class="q ${err ? 'invalid' : ''}" data-q="${q.id}">${control}
+    ${q.help ? `<div class="help" id="uw-${q.id}-help">${esc(q.help)}</div>` : ''}
+    ${from ? `<div class="from" id="uw-${q.id}-from">${from}</div>` : ''}
+    ${err ? `<p class="error" id="uw-${q.id}-err">${UW_COPY.required}</p>` : ''}</div>`;
+}
+
+// FACT_WORDS names each prefill fact plainly, so the summary says what was answered.
+const FACT_WORDS = {
+  OPERATOR_GIVEN_NAME: 'name', OPERATOR_FAMILY_NAME: 'name', OPERATOR_EMAIL: 'email', OPERATOR_PHONE: 'phone number', OPERATOR_BIRTH_DATE: 'birthday',
+  VEHICLE_MAKE: 'make', VEHICLE_MODEL: 'model', VEHICLE_YEAR: 'year', VEHICLE_LENGTH_FEET: 'length', VEHICLE_TYPE: 'type',
+  VEHICLE_CATEGORY: 'category', VEHICLE_ENGINE_COUNT: 'engines', VEHICLE_ENGINE_HORSEPOWER: 'horsepower', VEHICLE_MAX_PASSENGERS: 'passenger limit',
+  VEHICLE_ADDRESS_LINE_1: 'address', VEHICLE_ADDRESS_LINE_2: 'address', VEHICLE_ADDRESS_CITY: 'address', VEHICLE_ADDRESS_STATE: 'address', VEHICLE_ADDRESS_POSTAL_CODE: 'address',
+};
+function knownList(qs) {
+  const words = [...new Set(qs.map(q => FACT_WORDS[q.fact]).filter(Boolean))];
+  const list = words.length > 1 ? `${words.slice(0, -1).join(', ')} and ${words[words.length - 1]}` : words[0];
+  return `Its ${list}.`.replace(/^Its/, qs[0].role === 'contact' ? 'Your' : 'Its');
+}
+
+function renderUnderwriting() {
+  let html = `<div class="heading uw"><h1 id="nextHd" tabindex="-1">${esc(NEXT.buoy.title)}</h1><p>${esc(NEXT.buoy.body)}</p></div>`;
+  if (s.uwErrors && s.uwErrors.size) html += banner('error', '', UW_COPY.summary(s.uwErrors.size), '', 'uwSummary');
+  if (s.uwError) html += banner(s.uwError === 'held' ? 'warning' : 'error', UW_COPY[`${s.uwError}_title`], UW_COPY[`${s.uwError}_desc`], '', 'uwErr');
+  html += '<div class="uw">';
+  for (const [role, legend, lead] of UW_ROLES) {
+    const qs = UW_QUESTIONS.filter(q => q.role === role);
+    const known = qs.filter(q => s.uwKnown.has(q.id));
+    const open = s.uwReview[role];
+    const shown = qs.filter(q => !s.uwKnown.has(q.id));
+    const inside = known.filter(q => open || (s.uwErrors && s.uwErrors.has(q.id)));
+    let note = '';
+    if (known.length) {
+      note = `<div class="known"><strong id="uwk-${role}">${esc(UW_COPY.known_title(known.length, UW_COPY.known_where[role]))}</strong>
+        <span class="list">${esc(knownList(known))}</span>
+        ${inside.length ? `<div class="known-fields" id="uwkf-${role}">${inside.map(uwField).join('')}</div>` : ''}
+        <button class="btn-tertiary sm" data-review="${role}" aria-expanded="${!!open}" aria-controls="uwkf-${role}" aria-describedby="uwk-${role}">${open ? UW_COPY.hide : UW_COPY.review}</button></div>`;
+    }
+    html += `<fieldset><legend>${esc(legend)}</legend><p class="lead">${esc(lead)}</p>${note}${shown.map(uwField).join('')}</fieldset>`;
+  }
+  html += `<label class="confirm"><input type="checkbox" id="uwConfirm" ${s.uwConfirmed ? 'checked' : ''} ${s.uwConfirmError ? 'aria-invalid="true" aria-describedby="uwConfirmErr"' : ''}><span>${UW_COPY.confirm}</span></label>
+    ${s.uwConfirmError ? `<p class="error" id="uwConfirmErr">${UW_COPY.confirm_error}</p>` : ''}
+    <button class="btn-primary submit" id="uwSubmit" ${s.uwSending ? 'aria-disabled="true"' : ''}>${s.uwSending ? UW_COPY.submitting : UW_COPY.submit}</button></div>`;
+  return html;
+}
+
+function startUnderwriting() {
+  s.next = 'buoyForm';
+  if (!s.uw) {
+    s.uw = Object.fromEntries(UW_QUESTIONS.filter(q => q.fact).map(q => [q.id, factValue(q.fact)]));
+    s.uwKnown = new Set(UW_QUESTIONS.filter(q => q.fact && s.uw[q.id]).map(q => q.id));
+    s.uwReview = {};
+  }
+  render();
+  say(`${NEXT.buoy.title}. ${UW_ROLES.map(r => r[1]).join(', ')}.`);
+  $('nextHd').focus();
+}
+
+function submitUnderwriting() {
+  if (s.uwSending) return;
+  const missing = new Set(UW_QUESTIONS.filter(q => q.required && !String(s.uw[q.id] ?? '').trim()).map(q => q.id));
+  s.uwErrors = missing; s.uwConfirmError = !s.uwConfirmed; s.uwError = null;
+  if (missing.size || s.uwConfirmError) {
+    render();
+    if (missing.size) { say(UW_COPY.summary(missing.size)); const first = document.querySelector(`[data-q="${[...missing][0]}"] input, [data-q="${[...missing][0]}"] select`); if (first) first.focus(); }
+    else { say(UW_COPY.confirm_error); $('uwConfirm').focus(); }
+    return;
+  }
+  s.uwSending = true; render(); say(UW_COPY.submitting);
+  setTimeout(() => {
+    s.uwSending = false;
+    const answer = s.buoy; s.buoy = 'ok'; buildSeg('buoyAnswer', BUOY_OPTIONS, () => s.buoy, v => s.buoy = v);
+    emit(`underwriting submit: ${answer}`);
+    const commercial = s.selected === 'commercial';
+    const clearForm = () => { s.uw = null; s.uwKnown = null; s.uwReview = {}; s.uwErrors = null; s.uwConfirmed = false; };
+    if (answer === 'ok' || answer === 'approved') {
+      // The document is owed before awaiting Buoy, and before done (5.1).
+      const next = commercial ? 'document' : answer === 'ok' ? 'awaiting' : 'approved';
+      emit(`routing: next ${NEXT[next].scenario} ${NEXT[next].title}`);
+      clearForm(); return goNext(next);
+    }
+    if (answer === 'denied' || answer === 'deactivated') {
+      // Only a boat Buoy already holds. Personal: only Buoy could cover it (6.1). Commercial: the declaration is left for SB 606 (6.2).
+      s.refusal = answer;
+      const next = commercial ? 'declare' : 'denied';
+      emit(`routing: Buoy ${answer}, next ${commercial ? '6.2' : '6.1'} ${NEXT[next].title}`);
+      clearForm(); return goNext(next);
+    }
+    s.uwError = answer; render();
+    say(`${UW_COPY[`${answer}_title`]}. ${UW_COPY[`${answer}_desc`]}`);
+    $('uwErr').scrollIntoView({ block: 'nearest' });
+  }, 900);
+}
+
+const STATE_NAMES = { FL: 'Florida', CA: 'California' };
+// Sample text: Buoy's reasons about the boat are shown as Buoy wrote them; its reasons about the operator never are (6.4).
+const SAMPLE_BUOY_REASON = 'The boat’s age and hull type are outside what Buoy insures.';
+function bodyOf(key) {
+  const n = NEXT[key];
+  if (key === 'denied') return `Buoy won’t cover this boat, so it can’t offer trips in ${STATE_NAMES[loc().region] || loc().region} on a personal policy.`
+    + (s.refusal === 'denied' ? ` Buoy’s reason: “${SAMPLE_BUOY_REASON}”` : '');
+  if (key === 'declare' && s.refusal) return 'Buoy won’t cover this boat, so its SB 606 cover has to be arranged outside Boatsetter. Confirm the boat has it.';   // 6.2
+  return n.body;
+}
+
+function renderNext() {
+  if (s.next === 'buoyForm') return renderUnderwriting();
+  const n = NEXT[s.next];
+  let html = `<div class="heading"><h1 id="nextHd" tabindex="-1">${esc(n.title)}</h1><p>${esc(bodyOf(s.next))}</p></div>`;
+  if (s.next === 'sb606') {
+    html += `<div class="options" role="radiogroup" aria-labelledby="nextHd">${SB606_OPTIONS.map(([k, t, sub]) =>
+      `<div class="card" role="radio" aria-checked="false" tabindex="0" data-sb606="${k}"><div class="row"><div style="flex:1"><div class="title">${esc(t)}</div><div class="sub">${esc(sub)}</div></div><div class="radio"></div></div></div>`).join('')}</div>`;
+  } else if (n.action) {
+    html += `<div style="margin-top:24px"><button class="btn-primary" data-nextaction="${s.next}">${esc(n.action)}</button></div>`;
+  }
+  html += `<p class="hint" style="margin-top:24px;font-size:12px;color:var(--color-textSecondary)">${OPERATOR ? 'This screen is a rough sketch: its design isn’t done yet.' : `Prototype: scenario ${esc(n.scenario)}. This screen is a placeholder for a step not yet designed.`}</p>`;
+  return html;
+}
+
+function handleNext() {
+  if (s.next && NEXT[s.next] && NEXT[s.next].footer) {
+    emit('routing: insurance section left awaiting Buoy; wizard continues to operator type');
+    s.next = null;
+    s.done = 'The wizard moves on to the step after insurance: “Who can operate your boat?” End of the prototype.';
+    render(); say(s.done); return;
+  }
+  if ($('next').getAttribute('aria-disabled') === 'true') {
+    say(`${$('next').textContent}, button, dimmed. ${$('nextHint').textContent}`);
+    return;
+  }
+  s.saveError = null;                                        // the banner clears on retry
+  if (s.selected === 'commercial' && s.cover.size === 0) {   // local check; the BFF refusal is the backstop
+    showNoCover(); return;
+  }
+  if (unchangedFromView()) { finishSaved('NONE'); return; }  // 1.7 row 3: send nothing
+  s.submitting = true; render(); say('Saving');
+  setTimeout(() => {
+    s.submitting = false;
+    const answer = s.server; s.server = 'ok'; buildSeg('server', SERVER_OPTIONS, () => s.server, v => s.server = v);
+    if (answer === 'ok') return finishSaved(s.stored ? 'RESTATED' : 'STATED');
+    if (answer === 'unchanged') return finishSaved('UNCHANGED');
+    if (answer === 'no_cover') return showNoCover();
+    if (answer === 'no_location') { s.emittedNoLocation = false; showNoLocation(); render(); say(`${COPY.no_location_title}. ${COPY.no_location_desc}`); $('noLoc').scrollIntoView({ block: 'nearest' }); return; }
+    s.saveError = answer;
+    emit(`boat_insurance.not_saved.${answer}`, { source: 'web', what: 'statement' });
+    render();
+    const t = answer === 'unavailable' ? COPY.not_saved_title + '. ' + COPY.not_saved_desc : COPY.not_permitted_title + '. ' + COPY.not_permitted_desc;
+    say(t);
+    $('saveErr').scrollIntoView({ block: 'nearest' });
+  }, 900);
+}
+
+function showNoCover() {
+  const first = !s.coverError;
+  s.coverError = true;
+  if (first) emit('boat_insurance.not_saved.no_cover', { source: 'web', what: 'statement' });
+  render();
+  say(COPY.no_cover);
+  $('coverGroup').scrollIntoView({ block: 'nearest' });
+}
+
+function snack(title, desc) {
+  const el = $('snackbar');
+  el.innerHTML = `<svg class="si" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><span class="sm"><strong>${esc(title)}</strong><span>${esc(desc)}</span></span>`;
+  el.classList.add('show'); say(`${title}. ${desc}`);
+  clearTimeout(snack.t); snack.t = setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+function showDialog() {
+  const sc = $('scrim');
+  sc.innerHTML = `<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgT">
+    <div class="dh"><h2 id="dlgT">${esc(COPY.inel_title)}</h2></div><p class="dbh">${esc(COPY.inel_sub)}</p>
+    <div class="dbc">${banner('warning', COPY.inel_head, COPY.inel_body)}</div>
+    <div class="df"><button class="btn-primary" id="dlgBtn">${esc(COPY.inel_btn)}</button></div></div>`;
+  sc.classList.add('show');
+  $('dlgBtn').focus();
+  say(`${COPY.inel_title}, dialog. The statement was already recorded; section 2 replaces this dialog.`);
+}
+
+/* Facilitator wiring */
+function buildSeg(id, options, get, set) {
+  const el = $(id);
+  el.innerHTML = options.map(([v, l]) => `<button data-v="${v}" aria-pressed="${get() === v}">${esc(l)}</button>`).join('');
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; set(b.dataset.v); buildSeg(id, options, get, set); };
+}
+
+function startTask(task) {
+  s = newState(task);
+  $('log').innerHTML = ''; $('spoken').textContent = '';
+  $('scrim').classList.remove('show'); $('snackbar').classList.remove('show');
+  loadStatement();
+  $('tasks').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === task.id));
+  $('taskBrief').innerHTML = `<div class="try"><span class="k">Try</span>${esc(task.try)}</div><div class="expect"><span class="k">You should see</span>${esc(task.expect)}</div>`;
+  buildSeg('location', Object.entries(LOCATIONS).map(([k, v]) => [k, v.label]), () => s.location, v => { s.location = v; s.noLocationShown = false; s.emittedNoLocation = false; if (!hasLocation()) showNoLocation(); render(); });
+  buildSeg('read', READ_OPTIONS, () => s.read, v => { s.read = v; if (v === 'ok') loadStatement(); render(); });
+  buildSeg('server', SERVER_OPTIONS, () => s.server, v => s.server = v);
+  buildSeg('buoyAnswer', BUOY_OPTIONS, () => s.buoy, v => s.buoy = v);
+  if (!OPERATOR) location.hash = task.id;
+  render();
+}
+
+$('restart').onclick = () => { startTask(s.task); say('Restarted the task'); };
+$('tasks').innerHTML = TASKS.map(t => { const [, n, title] = t.title.match(/^(\d+)\.\s*(.*)$/); return `<button class="task" data-id="${t.id}"><span class="n" aria-hidden="true">${n}</span><span>${esc(title)}</span></button>`; }).join('');
+$('tasks').onclick = e => { const b = e.target.closest('button'); if (b) startTask(TASKS.find(t => t.id === b.dataset.id)); };
+buildSeg('viewport', [['phone', 'Phone'], ['desktop', 'Desktop']], () => viewport, v => { viewport = v; render(); });
+buildSeg('wording', Object.entries(WORDINGS).map(([k, w]) => [k, w.label]), () => wording, v => { applyWording(v); emit(`wording ${v}`); render(); });
+$('next').onclick = handleNext;
+
+$('form').addEventListener('click', e => {
+  const c = e.target.closest('.card[data-type]'); if (c) return select(c.dataset.type);
+  if (e.target.id === 'retryRead') { s.read = 'ok'; buildSeg('read', READ_OPTIONS, () => s.read, v => { s.read = v; if (v === 'ok') loadStatement(); render(); }); loadStatement(); render(); return; }
+  if (e.target.id === 'goDetails') { s.onDetails = true; render(); say('Boat Location'); return; }
+  if (e.target.id === 'uwSubmit') { submitUnderwriting(); return; }
+  const rv = e.target.closest('[data-review]');
+  if (rv) { const r = rv.dataset.review; s.uwReview[r] = !s.uwReview[r]; render(); const b = document.querySelector(`[data-review="${r}"]`); if (b) b.focus(); return; }
+  const sb = e.target.closest('[data-sb606]');
+  if (sb) { emit(`sb606 way chosen: ${sb.dataset.sb606}`); goNext(sb.dataset.sb606); return; }
+  const na = e.target.closest('[data-nextaction]');
+  if (na) {
+    if (na.dataset.nextaction === 'buoy') { startUnderwriting(); return; }
+    if (na.dataset.nextaction === 'noTrips') { s.next = null; s.selected = 'commercial'; render(); say(`Back on the insurance step. ${COPY.com_title}, radio button, checked`); return; }
+    s.done = OPERATOR ? 'End of the prototype. Next, you would upload the boat’s insurance document.' : 'End of the prototype. The step after this one belongs to section 2.'; s.next = null; render(); return;
+  }
+  const l = e.target.closest('[data-setloc]');
+  if (l) { s.location = l.dataset.setloc; s.onDetails = false; s.noLocationShown = false; render(); say('Back on the insurance step.'); return; }
+});
+$('form').addEventListener('change', e => {
+  if (e.target.dataset.cover) toggleCover(e.target.dataset.cover, e.target.checked);
+  if (e.target.id === 'uwConfirm') s.uwConfirmed = e.target.checked;
+});
+$('form').addEventListener('input', e => { if (e.target.dataset.uw && s.uw) s.uw[e.target.dataset.uw] = e.target.value; });
+$('form').addEventListener('keydown', e => {
+  const c = e.target.closest('.card');
+  if (!c || (e.key !== ' ' && e.key !== 'Enter')) return;
+  e.preventDefault();
+  if (c.dataset.sb606) { emit(`sb606 way chosen: ${c.dataset.sb606}`); goNext(c.dataset.sb606); return; }
+  select(c.dataset.type); c.focus();
+});
+$('scrim').addEventListener('click', e => { if (e.target.id === 'dlgBtn') { $('scrim').classList.remove('show'); s.done = 'Save and exit: back to the dashboard. The statement was recorded before the dialog showed.'; render(); } });
+
+if (OPERATOR) {
+  document.body.classList.add('operator');
+  $('panelWrap').querySelector('summary').textContent = 'About this prototype (tap to open or hide)';
+  $('panelWrap').querySelector('.phead').innerHTML = `<div class="eyebrow">Prototype</div><h2>Adding a boat: its insurance</h2>
+    <p>This is one step of adding a boat to Boatsetter. The boat operates outside the US, in Cape Town.</p>
+    <p>Answer the question as you would for your own boat, and say what you expect to happen before you press Next.</p>
+    <p>Nothing you enter is saved. <b>Restart</b>, at the top of the screen, starts again so you can try the other answer.</p>
+    <p>The question can be worded three ways. Switch between them below and tell us which reads most clearly.</p>`;
+  const wordingGroup = document.createElement('div');
+  wordingGroup.className = 'pgroup op-wording';
+  wordingGroup.append($('wording').previousElementSibling, $('wording'));
+  $('panelWrap').querySelector('.phead').after(wordingGroup);
+  buildSeg('wording', Object.keys(WORDINGS).map(k => [k, `Wording ${k}`]), () => wording, v => { applyWording(v); emit(`wording ${v}`); render(); });
+  startTask(TASKS.find(t => t.id === 'capetown'));
+} else {
+  if (matchMedia('(max-width: 760px)').matches) $('panelWrap').removeAttribute('open');
+  startTask(TASKS.find(t => '#' + t.id === location.hash) || TASKS[0]);
+}
+</script>
+</body>
+</html>
